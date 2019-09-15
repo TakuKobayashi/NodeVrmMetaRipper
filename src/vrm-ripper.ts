@@ -22,8 +22,8 @@ export class VRMRipper {
   }
 
   private parseMetum(): any {
-    const fileSizeBuffer = new Buffer(this.vrmBuffer.slice(12, 16));
-    const chunkSizeBuffer = new Buffer(this.vrmBuffer.slice(16, 20));
+    const fileSizeBuffer = Buffer.from(this.vrmBuffer.slice(8, 12));
+    const chunkSizeBuffer = Buffer.from(this.vrmBuffer.slice(12, 16));
     const fileSize = this.convertBufferToInt(fileSizeBuffer);
     const chunkSize = this.convertBufferToInt(chunkSizeBuffer);
     const jsonMetaJSON = this.vrmBuffer.slice(20, 20 + chunkSize).toString();
