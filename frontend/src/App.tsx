@@ -1,21 +1,23 @@
 import React from 'react';
 import './App.css';
 import { ThreeScene } from './compoments/three-scene';
-import {Button} from "@material-ui/core";
+import { Button, InputLabel, TextField } from '@material-ui/core';
 
 class App extends React.Component {
   threeSceneRef = React.createRef<ThreeScene>();
 
-    constructor(props: any) {
-        super(props);
-        this.onLoadVRM = this.onLoadVRM.bind(this);
-    }
+  private inputUrl: string = '';
 
-  onLoadVRM(){
-      if (!this.threeSceneRef.current) {
-          return;
-      }
-      this.threeSceneRef.current.updateVrmUrl('https://taptappun.s3-ap-northeast-1.amazonaws.com/test/AliciaSolid.vrm');
+  constructor(props: any) {
+    super(props);
+    this.onLoadVRM = this.onLoadVRM.bind(this);
+  }
+
+  onLoadVRM() {
+    if (!this.threeSceneRef.current) {
+      return;
+    }
+    this.threeSceneRef.current.updateVrmUrl(this.inputUrl);
   }
 
   render():
@@ -38,8 +40,10 @@ class App extends React.Component {
             Api Docs
           </a>
           <ThreeScene ref={this.threeSceneRef} />
+          <InputLabel htmlFor="url-simple">VRMファイルのURLを入力してください</InputLabel>
+          <TextField onChange={(e) => (this.inputUrl = e.target.value)} />
           <Button variant="contained" size="large" color="primary" onClick={this.onLoadVRM}>
-             VRMをロードする
+            VRMをロードする
           </Button>
         </header>
       </div>
