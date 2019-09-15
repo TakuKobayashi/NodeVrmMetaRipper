@@ -1,5 +1,5 @@
 import React from 'react';
-import { WebGLRenderer, Scene, PerspectiveCamera, AmbientLight, DirectionalLight, Color } from 'three';
+import { WebGLRenderer, Scene, PerspectiveCamera, DirectionalLight, Color } from 'three';
 import { VRM, VRMLoader } from 'three-vrm';
 import { OrbitControls } from 'three-orbitcontrols-ts';
 const vrmLoader = new VRMLoader();
