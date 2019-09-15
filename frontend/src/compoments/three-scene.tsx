@@ -1,29 +1,60 @@
 import React from 'react';
-import { WebGLRenderer, Scene, PerspectiveCamera, AmbientLight, DirectionalLight, Color } from "three";
+import { WebGLRenderer, Scene, PerspectiveCamera, AmbientLight, DirectionalLight, Color } from 'three';
 import { VRM, VRMLoader } from 'three-vrm';
 import { OrbitControls } from 'three-orbitcontrols-ts';
 const vrmLoader = new VRMLoader();
 
-export default class ThreeScene extends React.Component {
+interface VRMLoaderState {
+  url: string;
+}
+
+export class ThreeScene extends React.Component<{}, VRMLoaderState> {
   private canvas: HTMLCanvasElement | null = null;
   private scene: Scene | null = null;
   private camera: PerspectiveCamera | null = null;
   private renderer: WebGLRenderer | null = null;
   private frameId: number | null = null;
 
+  state: VRMLoaderState = {
+    url: 'https://taptappun.s3-ap-northeast-1.amazonaws.com/test/AliciaSolid.vrm',
+  };
+
   constructor(props: any) {
     super(props);
     this.animate = this.animate.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount() {}
+
+  updateVrmUrl(url: string) {
+    this.setState({
+      url: url,
+    });
+    this.loadVRM();
   }
 
-  private initScene(canvas: HTMLCanvasElement){
-    if(!canvas){
-      return
+  private loadVRM() {
+    vrmLoader.load(
+      this.state.url,
+      (vrm: VRM) => {
+        if (this.scene) {
+          this.scene.add(vrm.model);
+        }
+      },
+      (progress: ProgressEvent) => {
+        console.log(progress.loaded / progress.total);
+      },
+      (error: ErrorEvent) => {
+        console.error(error);
+      },
+    );
+  }
+
+  private initScene(canvas: HTMLCanvasElement) {
+    if (!canvas) {
+      return;
     }
-    const renderer = new WebGLRenderer({canvas: canvas, antialias: true });
+    const renderer = new WebGLRenderer({ canvas: canvas, antialias: true });
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
     this.canvas = canvas;
@@ -45,27 +76,15 @@ export default class ThreeScene extends React.Component {
     renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer = renderer;
     this.animate();
-
-    vrmLoader.load('https://taptappun.s3-ap-northeast-1.amazonaws.com/test/AliciaSolid.vrm',
-      (vrm: VRM) => {
-        scene.add(vrm.model);
-      },
-      (progress: ProgressEvent) => {
-        console.log(progress.loaded / progress.total);
-      },
-      (error: ErrorEvent) => {
-        console.error(error);
-      }
-    );
   }
 
   onCanvasLoaded = (canvas: HTMLCanvasElement) => {
-    this.initScene(canvas)
-  }
+    this.initScene(canvas);
+  };
 
   componentWillUnmount() {
     cancelAnimationFrame(this.frameId!);
-    if(this.canvas && this.renderer){
+    if (this.canvas && this.renderer) {
       this.canvas.removeChild(this.renderer.domElement);
     }
   }
@@ -73,7 +92,7 @@ export default class ThreeScene extends React.Component {
   animate() {
     // 次のフレームを要求
     this.frameId = window.requestAnimationFrame(this.animate);
-    if(this.renderer && this.scene && this.camera){
+    if (this.renderer && this.scene && this.camera) {
       this.renderer.render(this.scene, this.camera);
     }
   }
@@ -81,10 +100,7 @@ export default class ThreeScene extends React.Component {
   render() {
     return (
       <div>
-        <canvas
-          style={{ width: "80vw", height: "40vw" }}
-          ref={this.onCanvasLoaded}
-        />
+        <canvas style={{ width: '80vw', height: '40vw' }} ref={this.onCanvasLoaded} />
       </div>
     );
   }
