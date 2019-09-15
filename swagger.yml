@@ -1,21 +1,26 @@
 swagger: "2.0"
 info:
-  description: "これは形態素解析をAWS Lambdaで行ってくれるAPIです"
+  description: "3dモデルの中身のmeta情報を取得するためのAPI"
   version: "0.1.0"
-  title: "VRMMetaRipperAPI"
-  host: "https://qv2p534cl3.execute-api.ap-northeast-1.amazonaws.com"
-  basePath: "/dev"
+  title: "VrmRipperAPI"
+host: "qv2p534cl3.execute-api.ap-northeast-1.amazonaws.com"
+basePath: "/dev"
+schemes:
+- "https"
 paths:
   /ripper/vrm:
     get:
-      summary: "execute morphologic analysis"
-      description: ""
+      summary: "VRM ファイルの中身のJSONを抽出する"
+      description: "Multiple status values can be provided with comma separated strings"
+      produces:
+      - "application/json"
       parameters:
       - name: "url"
+        in: "query"
+        description: "VRMファイルのURL"
         required: true
-        type: "string"
       responses:
         200:
-          description: "VRM file parse success"
+          description: "successful"
           schema:
             type: "object"
