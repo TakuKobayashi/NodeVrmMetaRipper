@@ -32,10 +32,10 @@ class App extends React.Component {
     | undefined {
     return (
       <div className="App">
-        <a className="App-link" href="/references/">
+        <a className="App-link" href="./references/">
           References
         </a>
-        <a className="App-link" href="/swagger/">
+        <a className="App-link" href="./swagger/">
           Api Docs
         </a>
         <ThreeScene ref={this.threeSceneRef} />
