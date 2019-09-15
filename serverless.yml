@@ -1,0 +1,24 @@
+service:
+  name: vrm-meta-ripper-api
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# Add the serverless-webpack plugin
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: ap-northeast-1
+
+functions:
+  vrm-ripper:
+    handler: api/ripper/vrm/index.handler
+    memorySize: 128
+    timeout: 900
+    events:
+      - http:
+          method: get
+          path: ripper/vrm

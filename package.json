@@ -1,0 +1,52 @@
+{
+  "name": "node-vrm-meta-ripper",
+  "version": "0.1.0",
+  "author": "TakuKobayashi",
+  "description": "",
+  "directories": {
+    "lib": "src"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/TakuKobayashi/NodeVrmMetaRipper#readme",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TakuKobayashi/NodeVrmMetaRipper.git"
+  },
+  "keywords": [
+    "VRM",
+    "Node.js",
+    "typescript",
+    "GLTF"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "format": "prettier --config .prettierrc --write '**/*.{ts,js}'",
+    "docs": "typedoc --out docs/ && touch docs/.nojekyll",
+    "jest": "jest -c jest.config.js",
+    "serverless": "serverless"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.31",
+    "@types/jest": "^24.0.18",
+    "@types/node": "^12.7.5",
+    "documentation": "^12.1.2",
+    "jest": "^24.9.0",
+    "prettier": "^1.18.2",
+    "serverless-webpack": "^5.3.1",
+    "ts-jest": "^24.1.0",
+    "ts-loader": "^6.1.0",
+    "ts-node": "^8.3.0",
+    "typedoc": "^0.15.0",
+    "typescript": "^3.6.3",
+    "typings": "^2.1.1",
+    "webpack": "^4.40.2"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "source-map-support": "^0.5.13"
+  }
+}

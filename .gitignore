@@ -1,0 +1,46 @@
+node_modules
+bower_components
+lib-cov
+*.seed
+*.log
+*.out
+*.pid
+npm-debug.log
+*~
+*#
+.DS_STORE
+.netbeans
+nbproject
+.idea
+.node_history
+
+dist/
+
+# package directories
+jspm_packages
+
+# Serverless directories
+.serverless
+
+# Webpack directories
+.webpack
+
+# dependencies
+.pnp
+.pnp.js
+
+# production
+build/
+
+# misc
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+.gitconfig
