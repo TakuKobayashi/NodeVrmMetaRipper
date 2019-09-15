@@ -1,0 +1,21 @@
+swagger: "2.0"
+info:
+  description: "これは形態素解析をAWS Lambdaで行ってくれるAPIです"
+  version: "0.1.0"
+  title: "VRMMetaRipperAPI"
+  host: "https://qv2p534cl3.execute-api.ap-northeast-1.amazonaws.com"
+  basePath: "/dev"
+paths:
+  /ripper/vrm:
+    get:
+      summary: "execute morphologic analysis"
+      description: ""
+      parameters:
+      - name: "url"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "VRM file parse success"
+          schema:
+            type: "object"

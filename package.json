@@ -26,6 +26,7 @@
     "format": "prettier --config .prettierrc --write '**/*.{ts,js}'",
     "docs": "typedoc --out docs/ && touch docs/.nojekyll",
     "jest": "jest -c jest.config.js",
+    "swagger:build": "redoc-cli bundle swagger.yml -o docs/swagger/index.html",
     "serverless": "serverless"
   },
   "license": "MIT",
@@ -36,7 +37,10 @@
     "documentation": "^12.1.2",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
+    "redoc": "^2.0.0-rc.14",
+    "redoc-cli": "^0.8.6",
     "serverless-webpack": "^5.3.1",
+    "swagger": "^0.7.5",
     "ts-jest": "^24.1.0",
     "ts-loader": "^6.1.0",
     "ts-node": "^8.3.0",
