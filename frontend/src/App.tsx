@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { ThreeScene } from './compoments/three-scene';
-import { Button, Grid, InputLabel, TextField } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 
 class App extends React.Component {
   threeSceneRef = React.createRef<ThreeScene>();
