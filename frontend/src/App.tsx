@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { ThreeScene } from './compoments/three-scene';
-import { Button, InputLabel, TextField } from '@material-ui/core';
+import { Button, Grid, InputLabel, TextField } from '@material-ui/core';
 
 class App extends React.Component {
   threeSceneRef = React.createRef<ThreeScene>();
@@ -32,20 +32,21 @@ class App extends React.Component {
     | undefined {
     return (
       <div className="App">
-        <header className="App-header">
-          <a className="App-link" href="/references/">
-            References
-          </a>
-          <a className="App-link" href="/swagger/">
-            Api Docs
-          </a>
-          <ThreeScene ref={this.threeSceneRef} />
-          <InputLabel htmlFor="url-simple">VRMファイルのURLを入力してください</InputLabel>
-          <TextField onChange={(e) => (this.inputUrl = e.target.value)} />
-          <Button variant="contained" size="large" color="primary" onClick={this.onLoadVRM}>
-            VRMをロードする
-          </Button>
-        </header>
+        <a className="App-link" href="/references/">
+          References
+        </a>
+        <a className="App-link" href="/swagger/">
+          Api Docs
+        </a>
+        <ThreeScene ref={this.threeSceneRef} />
+        <TextField
+          style={{ width: 800 }}
+          placeholder="VRMファイルのURLを入力してください"
+          onChange={(e) => (this.inputUrl = e.target.value)}
+        />
+        <Button variant="contained" size="large" color="primary" onClick={this.onLoadVRM}>
+          VRMをロードする
+        </Button>
       </div>
     );
   }
