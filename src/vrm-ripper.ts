@@ -1,5 +1,8 @@
+import { GlTf } from "gltf-loader-ts/lib/gltf";
+
 const fs = require('fs');
 import axios from 'axios';
+import { VRMMeta } from "./vrm-meta";
 
 export class VRMRipper {
   private vrmBuffer = [];
@@ -17,11 +20,11 @@ export class VRMRipper {
     return this.vrmBuffer;
   }
 
-  getMeta(): any {
+  getMeta(): VRMMeta {
     return this.parseMetum();
   }
 
-  private parseMetum(): any {
+  private parseMetum(): VRMMeta {
     const fileSizeBuffer = Buffer.from(this.vrmBuffer.slice(8, 12));
     const chunkSizeBuffer = Buffer.from(this.vrmBuffer.slice(12, 16));
     const fileSize = this.convertBufferToInt(fileSizeBuffer);
@@ -30,7 +33,7 @@ export class VRMRipper {
     return {
       fileSize,
       chunkSize,
-      meta: JSON.parse(jsonMetaJSON),
+      meta: JSON.parse(jsonMetaJSON) as GlTf,
     };
   }
 
