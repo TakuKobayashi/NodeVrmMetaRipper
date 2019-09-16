@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { ThreeScene } from './compoments/three-scene';
-import { Button, TextField } from '@material-ui/core';
+import { AppBar, Button, Link, TextField, Toolbar } from '@material-ui/core';
 
 class App extends React.Component {
   threeSceneRef = React.createRef<ThreeScene>();
@@ -32,12 +32,16 @@ class App extends React.Component {
     | undefined {
     return (
       <div className="App">
-        <a className="App-link" href="./references/">
-          References
-        </a>
-        <a className="App-link" href="./swagger/">
-          Api Docs
-        </a>
+        <AppBar position="relative" color="inherit">
+          <Toolbar>
+            <Button href="./references/" className="App-link">
+              References
+            </Button>
+            <Button href="./swagger/" className="App-link">
+              Api Docs
+            </Button>
+          </Toolbar>
+        </AppBar>
         <ThreeScene ref={this.threeSceneRef} />
         <TextField
           style={{ width: 800 }}
