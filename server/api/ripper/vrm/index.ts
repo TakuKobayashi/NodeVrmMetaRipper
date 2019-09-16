@@ -9,6 +9,9 @@ export const handler: APIGatewayProxyHandler = async (event, _context) => {
   await vrmRipper.loadVrmFromUrl(vrmFileUrl);
   return {
     statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*', // Required for CORS support to work
+    },
     body: JSON.stringify(
       vrmRipper.getMeta(),
       null,
