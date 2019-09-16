@@ -1,10 +1,18 @@
 import React from 'react';
 import './App.css';
+import axios from 'axios'
 import { ThreeScene } from './compoments/three-scene';
-import { AppBar, Button, Link, TextField, Toolbar } from '@material-ui/core';
+import { AppBar, Box, Button, Link, TextField, Toolbar, Typography } from '@material-ui/core';
 
-class App extends React.Component {
+interface LoadJsonState {
+  json: string;
+}
+
+class App extends React.Component<{}, LoadJsonState> {
   threeSceneRef = React.createRef<ThreeScene>();
+  state: LoadJsonState = {
+    json: '',
+  };
 
   private inputUrl: string = '';
 
@@ -18,6 +26,14 @@ class App extends React.Component {
       return;
     }
     this.threeSceneRef.current.updateVrmUrl(this.inputUrl);
+    axios.get("https://qv2p534cl3.execute-api.ap-northeast-1.amazonaws.com/dev/ripper/vrm", {
+      params: {
+        url: this.inputUrl,
+      }
+    }).then(response => {
+      this.setState({json: JSON.stringify(response.data, null, 2)});
+      console.log(this.state.json);
+    })
   }
 
   render():
@@ -51,6 +67,12 @@ class App extends React.Component {
         <Button variant="contained" size="large" color="primary" onClick={this.onLoadVRM}>
           VRMをロードする
         </Button>
+        <Typography component="div">
+          <p>VRMのメタ情報</p>
+          <Box bgcolor="#f5f5f5" fontWeight="fontWeightLight" m={3} style={{textAlign: "left", whiteSpace: 'pre'}}>
+            {this.state.json}
+          </Box>
+        </Typography>
       </div>
     );
   }
