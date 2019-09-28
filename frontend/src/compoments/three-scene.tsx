@@ -16,7 +16,7 @@ export class ThreeScene extends React.Component<{}, VRMLoaderState> {
   private frameId: number | null = null;
 
   state: VRMLoaderState = {
-    url: 'https://taptappun.s3-ap-northeast-1.amazonaws.com/test/AliciaSolid.vrm',
+    url: '',
   };
 
   constructor(props: any) {
@@ -27,15 +27,12 @@ export class ThreeScene extends React.Component<{}, VRMLoaderState> {
   componentDidMount() {}
 
   updateVrmUrl(url: string) {
-    this.setState({
-      url: url,
-    });
-    this.loadVRM();
+    this.loadVRM(url);
   }
 
-  private loadVRM() {
+  private loadVRM(url: string) {
     vrmLoader.load(
-      this.state.url,
+      url,
       (vrm: VRM) => {
         if (this.scene) {
           this.scene.add(vrm.model);
