@@ -1,9 +1,8 @@
 import React from 'react';
 import { WebGLRenderer, Scene, PerspectiveCamera, DirectionalLight, Color } from 'three';
-import { VRM, VRMLoader } from 'three-vrm';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { VRM } from '@pixiv/three-vrm';
 import { OrbitControls } from 'three-orbitcontrols-ts';
-const vrmLoader = new VRMLoader();
-
 interface VRMLoaderState {
   url: string;
 }
@@ -15,12 +14,11 @@ export class ThreeScene extends React.Component<{}, VRMLoaderState> {
   private renderer: WebGLRenderer | null = null;
   private frameId: number | null = null;
 
-  state: VRMLoaderState = {
-    url: '',
-  };
-
   constructor(props: any) {
     super(props);
+    this.state = {
+      url: '',
+    };
     this.animate = this.animate.bind(this);
   }
 
@@ -31,12 +29,16 @@ export class ThreeScene extends React.Component<{}, VRMLoaderState> {
   }
 
   private loadVRM(url: string) {
-    vrmLoader.load(
-      url,
-      (vrm: VRM) => {
-        if (this.scene) {
-          this.scene.add(vrm.model);
-        }
+    this.setState({url: url})
+    const gltfLoader = new GLTFLoader();
+    gltfLoader.load(
+      this.state.url,
+      ( gltf ) => {
+        VRM.from( gltf ).then( ( vrm ) => {
+          if (this.scene) {
+            this.scene.add(vrm.scene);
+          }
+        })
       },
       (progress: ProgressEvent) => {
         console.log(progress.loaded / progress.total);
