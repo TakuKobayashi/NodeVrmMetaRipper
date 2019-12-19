@@ -1,7 +1,6 @@
 const fs = require('fs');
 import axios from 'axios';
 import { Parser } from 'mmd-parser';
-import { Parser } from 'yargs-parser';
 
 export class MMDRipper {
   private vmdBuffer = [];
