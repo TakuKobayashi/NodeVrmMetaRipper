@@ -32,7 +32,7 @@ export class ThreeScene extends React.Component<{}, VRMLoaderState> {
     this.setState({url: url})
     const gltfLoader = new GLTFLoader();
     gltfLoader.load(
-      this.state.url,
+      url,
       ( gltf ) => {
         VRM.from( gltf ).then( ( vrm ) => {
           if (this.scene) {
