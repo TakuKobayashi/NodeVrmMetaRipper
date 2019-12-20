@@ -9,7 +9,7 @@ interface LoadJsonState {
 }
 
 class App extends React.Component<{}, LoadJsonState> {
-  threeSceneRef = React.createRef<ThreeScene>();
+  private threeSceneRef = React.createRef<ThreeScene>();
   state: LoadJsonState = {
     json: '',
   };
