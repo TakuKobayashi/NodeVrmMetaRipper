@@ -3,7 +3,7 @@ import { WebGLRenderer, Scene, PerspectiveCamera, DirectionalLight, Color } from
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRM } from '@pixiv/three-vrm';
 import { OrbitControls } from 'three-orbitcontrols-ts';
-export class ThreeScene extends React.Component<{}, VRMLoaderState> {
+export class ThreeScene extends React.Component {
   private canvas: HTMLCanvasElement | null = null;
   private scene: Scene | null = null;
   private camera: PerspectiveCamera | null = null;
