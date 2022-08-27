@@ -21,7 +21,7 @@ const Home: NextPage = (props: any) => {
   const onLoadVRM = async (url: string) => {
     threeSceneRef?.current?.updateVrmUrl(url);
     const vrmRes = await axios.get(url, { responseType: 'arraybuffer' });
-    const parsedVrm = parseMetum(vrmRes.data)
+    const parsedVrm = parseMetum(vrmRes.data);
     setResponseJson(JSON.stringify(JSON.parse(parsedVrm.metaString), null, 2));
   };
   let metaInfo = <></>;
@@ -100,7 +100,7 @@ function convertBufferToInt(byteSizeBuffer: Buffer): number {
   return parseInt(hexSumString, 16);
 }
 
-interface VRMMeta{
+interface VRMMeta {
   fileSize: number;
   chunkSize: number;
   metaString: string;
