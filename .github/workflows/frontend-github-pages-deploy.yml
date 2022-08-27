@@ -1,0 +1,36 @@
+name: frontend github pages deploy
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  build-and-deploy-frontend:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+        root-project-path: [./frontend]
+    steps:
+    - uses: actions/checkout@v2
+    - name: setup ubuntu
+      run: sudo apt-get --quiet update --yes
+        - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: yarn install
+      working-directory: ${{ matrix.root-project-path }}
+      run: yarn install
+    - name: yarn build
+      working-directory: ${{ matrix.root-project-path }}
+      run: yarn run export
+    - name: deploy
+      uses: peaceiris/actions-gh-pages@v3.8.0
+      env:
+        ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        PUBLISH_BRANCH: gh-pages
+        PUBLISH_DIR: ${{ matrix.root-project-path }}/out
