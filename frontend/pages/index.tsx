@@ -5,7 +5,7 @@ import styles from '../styles/Home.module.css';
 import { ThreeScene } from '../compoments/three-scene';
 import { AppBar, Box, Button, Link, TextField, Toolbar, Typography } from '@material-ui/core';
 import { useState, createRef } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { DropzoneArea } from 'material-ui-dropzone';
 import axios from 'axios';
 
 const Home: NextPage = (props: any) => {
@@ -17,16 +17,17 @@ const Home: NextPage = (props: any) => {
     const parsedVrm = parseMetum(binary);
     setResponseJson(JSON.stringify(JSON.parse(parsedVrm.metaString), null, 2));
   };
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-  for (const file of acceptedFiles) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const readFileResult = reader.result;
-      if (readFileResult !== null) {
-        parseAndShowVRM(readFileResult);
-      }
-    };
-    reader.readAsArrayBuffer(file);
+  const onLoadFile = (files: File[]) => {
+    for (const file of files) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const readFileResult = reader.result;
+        if (readFileResult !== null) {
+          parseAndShowVRM(readFileResult);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
   }
   const onLoadVRM = async (url: string) => {
     const vrmRes = await axios.get(url, { responseType: 'arraybuffer' });
@@ -68,12 +69,12 @@ const Home: NextPage = (props: any) => {
         <Button variant="contained" size="large" color="primary" onClick={(e) => onLoadVRM(inputUrl)}>
           VRMをロードする
         </Button>
-        <section className="container">
-          <div {...getRootProps({ className: 'dropzone' })}>
-            <input {...getInputProps()} />
-            <p>ここをクリックしてVRMファイルを選択するか、ファイルをドラッグアンドドロップしてください</p>
-          </div>
-        </section>
+        <DropzoneArea
+          maxFileSize={5 * 1024 * 1024 * 1024}
+          filesLimit={1}
+          dropzoneText="ここをクリックしてVRMファイルを選択するか、ファイルをドラッグアンドドロップしてください"
+          onChange={(files) => onLoadFile(files)}
+        />
         {metaInfo}
       </main>
 
