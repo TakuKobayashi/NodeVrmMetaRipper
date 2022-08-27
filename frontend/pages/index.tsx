@@ -10,7 +10,7 @@ import axios from 'axios';
 const Home: NextPage = (props: any) => {
   const threeSceneRef = createRef<ThreeScene>();
   const threeScene = <ThreeScene ref={threeSceneRef} />;
-  const [responseJson, setResponseJson] = useState(JSON.stringify({}));
+  const [responseJson, setResponseJson] = useState('');
   const onLoadVRM = async (inputUrl: string) => {
     threeSceneRef?.current?.updateVrmUrl(inputUrl);
     const response = await axios.get('https://qv2p534cl3.execute-api.ap-northeast-1.amazonaws.com/dev/ripper/vrm', {
@@ -20,6 +20,18 @@ const Home: NextPage = (props: any) => {
     });
     setResponseJson(JSON.stringify(response.data, null, 2));
   };
+  let metaInfo = <></>;
+  if (responseJson) {
+    metaInfo = (
+      <Typography component="div">
+        <p>VRMのメタ情報</p>
+        <Box bgcolor="#f5f5f5" fontWeight="fontWeightLight" m={3} style={{ textAlign: 'left', whiteSpace: 'pre' }}>
+          {responseJson}
+        </Box>
+      </Typography>
+    );
+  }
+
   const [inputUrl, setInputUrl] = useState('');
   return (
     <div className={styles.container}>
@@ -44,6 +56,7 @@ const Home: NextPage = (props: any) => {
         <Button variant="contained" size="large" color="primary" onClick={(e) => onLoadVRM(inputUrl)}>
           VRMをロードする
         </Button>
+        {metaInfo}
       </main>
 
       <footer className={styles.footer}></footer>
