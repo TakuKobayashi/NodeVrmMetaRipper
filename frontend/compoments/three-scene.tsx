@@ -3,10 +3,6 @@ import { WebGLRenderer, Scene, PerspectiveCamera, DirectionalLight, Color } from
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRM } from '@pixiv/three-vrm';
 import { OrbitControls } from 'three-orbitcontrols-ts';
-interface VRMLoaderState {
-  url: string;
-}
-
 export class ThreeScene extends React.Component<{}, VRMLoaderState> {
   private canvas: HTMLCanvasElement | null = null;
   private scene: Scene | null = null;
@@ -16,37 +12,29 @@ export class ThreeScene extends React.Component<{}, VRMLoaderState> {
 
   constructor(props: any) {
     super(props);
-    this.state = {
-      url: '',
-    };
     this.animate = this.animate.bind(this);
   }
 
   componentDidMount() {}
 
-  updateVrmUrl(url: string) {
-    this.loadVRM(url);
+  async updateVrmUrl(url: string): Promise<VRM> {
+    const gltfLoader = new GLTFLoader();
+    const gltf = await gltfLoader.loadAsync(url);
+    const vrm = await VRM.from(gltf);
+    if (this.scene) {
+      this.scene.add(vrm.scene);
+    }
+    return vrm;
   }
 
-  private loadVRM(url: string) {
-    this.setState({ url: url });
+  async updateVrmArryaBuffer(arrayBuffer: string | ArrayBuffer): Promise<VRM> {
     const gltfLoader = new GLTFLoader();
-    gltfLoader.load(
-      url,
-      (gltf) => {
-        VRM.from(gltf).then((vrm) => {
-          if (this.scene) {
-            this.scene.add(vrm.scene);
-          }
-        });
-      },
-      (progress: ProgressEvent) => {
-        console.log(progress.loaded / progress.total);
-      },
-      (error: ErrorEvent) => {
-        console.error(error);
-      },
-    );
+    const gltf = await gltfLoader.parseAsync(arrayBuffer, '');
+    const vrm = await VRM.from(gltf);
+    if (this.scene) {
+      this.scene.add(vrm.scene);
+    }
+    return vrm;
   }
 
   private initScene(canvas: HTMLCanvasElement) {

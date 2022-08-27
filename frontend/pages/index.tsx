@@ -12,25 +12,25 @@ const Home: NextPage = (props: any) => {
   const threeSceneRef = createRef<ThreeScene>();
   const threeScene = <ThreeScene ref={threeSceneRef} />;
   const [responseJson, setResponseJson] = useState('');
+  const parseAndShowVRM = (binary: ArrayBuffer | string) => {
+    threeSceneRef?.current?.updateVrmArryaBuffer(binary);
+    const parsedVrm = parseMetum(binary);
+    setResponseJson(JSON.stringify(JSON.parse(parsedVrm.metaString), null, 2));
+  };
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-  const files = acceptedFiles.map((file) => {
+  for (const file of acceptedFiles) {
     const reader = new FileReader();
     reader.onload = () => {
-      const parsedVrm = parseMetum(reader.result);
-      setResponseJson(JSON.stringify(JSON.parse(parsedVrm.metaString), null, 2));
+      const readFileResult = reader.result;
+      if (readFileResult !== null) {
+        parseAndShowVRM(readFileResult);
+      }
     };
     reader.readAsArrayBuffer(file);
-    return (
-      <li key={file.name}>
-        {file.name} - {file.size} bytes
-      </li>
-    );
-  });
+  }
   const onLoadVRM = async (url: string) => {
-    threeSceneRef?.current?.updateVrmUrl(url);
     const vrmRes = await axios.get(url, { responseType: 'arraybuffer' });
-    const parsedVrm = parseMetum(vrmRes.data);
-    setResponseJson(JSON.stringify(JSON.parse(parsedVrm.metaString), null, 2));
+    parseAndShowVRM(vrmRes.data);
   };
   let metaInfo = <></>;
   if (responseJson) {
@@ -73,10 +73,6 @@ const Home: NextPage = (props: any) => {
             <input {...getInputProps()} />
             <p>Drag 'n' drop some files here, or click to select files</p>
           </div>
-          <aside>
-            <h4>Files</h4>
-            <ul>{files}</ul>
-          </aside>
         </section>
         {metaInfo}
       </main>
