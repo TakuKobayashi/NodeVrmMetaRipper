@@ -13,11 +13,19 @@ const Home: NextPage = (props: any) => {
   const threeScene = <ThreeScene ref={threeSceneRef} />;
   const [responseJson, setResponseJson] = useState('');
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-  const files = acceptedFiles.map((file) => (
-    <li key={file.name}>
-      {file.name} - {file.size} bytes
-    </li>
-  ));
+  const files = acceptedFiles.map((file) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const parsedVrm = parseMetum(reader.result);
+      setResponseJson(JSON.stringify(JSON.parse(parsedVrm.metaString), null, 2));
+    };
+    reader.readAsArrayBuffer(file);
+    return (
+      <li key={file.name}>
+        {file.name} - {file.size} bytes
+      </li>
+    );
+  });
   const onLoadVRM = async (url: string) => {
     threeSceneRef?.current?.updateVrmUrl(url);
     const vrmRes = await axios.get(url, { responseType: 'arraybuffer' });
