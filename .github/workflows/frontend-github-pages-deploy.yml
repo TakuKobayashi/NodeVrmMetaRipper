@@ -33,7 +33,7 @@ jobs:
       run: yarn run export
     - name: deploy
       uses: peaceiris/actions-gh-pages@v3.8.0
-      env:
+      with:
         ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
         PUBLISH_BRANCH: gh-pages
         PUBLISH_DIR: ${{ matrix.root-project-path }}/out
