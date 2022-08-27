@@ -29,16 +29,16 @@ export class ThreeScene extends React.Component<{}, VRMLoaderState> {
   }
 
   private loadVRM(url: string) {
-    this.setState({url: url})
+    this.setState({ url: url });
     const gltfLoader = new GLTFLoader();
     gltfLoader.load(
       url,
-      ( gltf ) => {
-        VRM.from( gltf ).then( ( vrm ) => {
+      (gltf) => {
+        VRM.from(gltf).then((vrm) => {
           if (this.scene) {
             this.scene.add(vrm.scene);
           }
-        })
+        });
       },
       (progress: ProgressEvent) => {
         console.log(progress.loaded / progress.total);
@@ -80,13 +80,6 @@ export class ThreeScene extends React.Component<{}, VRMLoaderState> {
   onCanvasLoaded = (canvas: HTMLCanvasElement) => {
     this.initScene(canvas);
   };
-
-  componentWillUnmount() {
-    cancelAnimationFrame(this.frameId!);
-    if (this.canvas && this.renderer) {
-      this.canvas.removeChild(this.renderer.domElement);
-    }
-  }
 
   animate() {
     // 次のフレームを要求
