@@ -19,6 +19,7 @@
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.2",
     "three": "^0.143.0",
     "three-orbitcontrols-ts": "^0.1.2"
   },

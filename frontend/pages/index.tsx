@@ -5,20 +5,24 @@ import styles from '../styles/Home.module.css';
 import { ThreeScene } from '../compoments/three-scene';
 import { AppBar, Box, Button, Link, TextField, Toolbar, Typography } from '@material-ui/core';
 import { useState, createRef } from 'react';
+import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 
 const Home: NextPage = (props: any) => {
   const threeSceneRef = createRef<ThreeScene>();
   const threeScene = <ThreeScene ref={threeSceneRef} />;
   const [responseJson, setResponseJson] = useState('');
-  const onLoadVRM = async (inputUrl: string) => {
-    threeSceneRef?.current?.updateVrmUrl(inputUrl);
-    const response = await axios.get('https://qv2p534cl3.execute-api.ap-northeast-1.amazonaws.com/dev/ripper/vrm', {
-      params: {
-        url: inputUrl,
-      },
-    });
-    setResponseJson(JSON.stringify(response.data, null, 2));
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+  const files = acceptedFiles.map((file) => (
+    <li key={file.name}>
+      {file.name} - {file.size} bytes
+    </li>
+  ));
+  const onLoadVRM = async (url: string) => {
+    threeSceneRef?.current?.updateVrmUrl(url);
+    const vrmRes = await axios.get(url, { responseType: 'arraybuffer' });
+    const parsedVrm = parseMetum(vrmRes.data)
+    setResponseJson(JSON.stringify(JSON.parse(parsedVrm.metaString), null, 2));
   };
   let metaInfo = <></>;
   if (responseJson) {
@@ -31,8 +35,8 @@ const Home: NextPage = (props: any) => {
       </Typography>
     );
   }
-
   const [inputUrl, setInputUrl] = useState('');
+
   return (
     <div className={styles.container}>
       <Head>
@@ -56,6 +60,16 @@ const Home: NextPage = (props: any) => {
         <Button variant="contained" size="large" color="primary" onClick={(e) => onLoadVRM(inputUrl)}>
           VRMをロードする
         </Button>
+        <section className="container">
+          <div {...getRootProps({ className: 'dropzone' })}>
+            <input {...getInputProps()} />
+            <p>Drag 'n' drop some files here, or click to select files</p>
+          </div>
+          <aside>
+            <h4>Files</h4>
+            <ul>{files}</ul>
+          </aside>
+        </section>
         {metaInfo}
       </main>
 
@@ -63,5 +77,33 @@ const Home: NextPage = (props: any) => {
     </div>
   );
 };
+
+function parseMetum(vrmBuffer: any): VRMMeta {
+  const fileSizeBuffer = Buffer.from(vrmBuffer.slice(8, 12));
+  const chunkSizeBuffer = Buffer.from(vrmBuffer.slice(12, 16));
+  const fileSize = convertBufferToInt(fileSizeBuffer);
+  const chunkSize = convertBufferToInt(chunkSizeBuffer);
+  const jsonMetaJSON: string = Buffer.from(vrmBuffer.slice(20, 20 + chunkSize)).toString();
+  return {
+    fileSize,
+    chunkSize,
+    metaString: jsonMetaJSON,
+  };
+}
+
+function convertBufferToInt(byteSizeBuffer: Buffer): number {
+  const reverseBuffer = byteSizeBuffer.reverse();
+  let hexSumString = '';
+  for (const byte of reverseBuffer) {
+    hexSumString = hexSumString + byte.toString(16);
+  }
+  return parseInt(hexSumString, 16);
+}
+
+interface VRMMeta{
+  fileSize: number;
+  chunkSize: number;
+  metaString: string;
+}
 
 export default Home;
